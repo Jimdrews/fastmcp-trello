@@ -1,4 +1,7 @@
-"""Live smoke tests against real Trello API. Skipped unless TRELLO_API_KEY and TRELLO_TOKEN are set."""
+"""Live smoke tests against real Trello API.
+
+Skipped unless TRELLO_API_KEY and TRELLO_TOKEN are set.
+"""
 
 import os
 

@@ -1,8 +1,7 @@
 import pytest
-import httpx
 from pytest_httpx import HTTPXMock
 
-from trello_mcp.client import TrelloClient, TrelloAPIError
+from trello_mcp.client import TrelloAPIError, TrelloClient
 
 
 @pytest.fixture
@@ -342,7 +341,7 @@ class TestSearchCards:
             cards = await client.search_cards("login", board_id="board1")
         assert cards == []
         request = httpx_mock.get_request()
-        assert "board1" in str(request.url)
+        assert "board1" in str(request.url)  # pyrefly: ignore [missing-attribute]
 
     @pytest.mark.asyncio
     async def test_search_no_results(self, client, httpx_mock: HTTPXMock):

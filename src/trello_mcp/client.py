@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Any
+
 import httpx
 
 from trello_mcp.models import Board, Card, Comment, Label, Member, TrelloList
@@ -29,7 +31,7 @@ class TrelloClient:
     async def __aexit__(self, *exc: object) -> None:
         await self._http.aclose()
 
-    async def _request(self, method: str, path: str, **kwargs: object) -> httpx.Response:
+    async def _request(self, method: str, path: str, **kwargs: Any) -> httpx.Response:
         response = await self._http.request(method, path, **kwargs)
         if response.status_code in _ERROR_MESSAGES:
             raise TrelloAPIError(_ERROR_MESSAGES[response.status_code])
@@ -41,10 +43,11 @@ class TrelloClient:
     # --- Boards ---
 
     async def get_boards(self) -> list[Board]:
-        resp = await self._request("GET", "members/me/boards", params={"filter": "open"})
+        resp = await self._request(
+            "GET", "members/me/boards", params={"filter": "open"}
+        )
         return [
-            Board(id=b["id"], name=b["name"], url=b.get("url"))
-            for b in resp.json()
+            Board(id=b["id"], name=b["name"], url=b.get("url")) for b in resp.json()
         ]
 
     async def get_board(self, board_id: str) -> Board:
@@ -62,10 +65,7 @@ class TrelloClient:
         resp = await self._request(
             "GET", f"boards/{board_id}/lists", params={"filter": "open"}
         )
-        return [
-            TrelloList(id=l["id"], name=l["name"])
-            for l in resp.json()
-        ]
+        return [TrelloList(id=item["id"], name=item["name"]) for item in resp.json()]
 
     # --- Cards ---
 
@@ -110,8 +110,8 @@ class TrelloClient:
         ]
 
         labels = [
-            Label(id=l["id"], name=l.get("name", ""), color=l.get("color"))
-            for l in data.get("labels", [])
+            Label(id=lbl["id"], name=lbl.get("name", ""), color=lbl.get("color"))
+            for lbl in data.get("labels", [])
         ]
 
         return Card(
@@ -187,9 +187,7 @@ class TrelloClient:
 
     # --- Search ---
 
-    async def search_cards(
-        self, query: str, board_id: str | None = None
-    ) -> list[Card]:
+    async def search_cards(self, query: str, board_id: str | None = None) -> list[Card]:
         params: dict[str, str] = {"query": query, "modelTypes": "cards"}
         if board_id:
             params["idBoards"] = board_id
@@ -203,8 +201,12 @@ class TrelloClient:
                 due=c.get("due"),
                 closed=c.get("closed", False),
                 labels=[
-                    Label(id=l["id"], name=l.get("name", ""), color=l.get("color"))
-                    for l in c.get("labels", [])
+                    Label(
+                        id=lbl["id"],
+                        name=lbl.get("name", ""),
+                        color=lbl.get("color"),
+                    )
+                    for lbl in c.get("labels", [])
                 ],
                 board_name=c.get("board", {}).get("name"),
                 list_name=c.get("list", {}).get("name"),
@@ -222,8 +224,8 @@ class TrelloClient:
             due=data.get("due"),
             closed=data.get("closed", False),
             labels=[
-                Label(id=l["id"], name=l.get("name", ""), color=l.get("color"))
-                for l in data.get("labels", [])
+                Label(id=lbl["id"], name=lbl.get("name", ""), color=lbl.get("color"))
+                for lbl in data.get("labels", [])
             ],
             url=data.get("url"),
         )

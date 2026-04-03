@@ -1,8 +1,8 @@
 """Integration tests calling all 10 tools through FastMCP in-memory client."""
 
-import pytest
 from unittest.mock import AsyncMock, patch
 
+import pytest
 from fastmcp import Client
 
 from trello_mcp.client import TrelloClient
@@ -90,38 +90,38 @@ async def test_all_tools_through_mcp(mock_client):
 
             # Call each tool and verify it returns text
             result = await c.call_tool("get_boards", {})
-            assert "Sprint 42" in result.content[0].text
+            assert "Sprint 42" in result.content[0].text  # pyrefly: ignore [missing-attribute]
 
             result = await c.call_tool("get_board", {"board_id": "board1"})
-            assert "Sprint 42" in result.content[0].text
+            assert "Sprint 42" in result.content[0].text  # pyrefly: ignore [missing-attribute]
 
             result = await c.call_tool("get_lists", {"board_id": "board1"})
-            assert "To Do" in result.content[0].text
+            assert "To Do" in result.content[0].text  # pyrefly: ignore [missing-attribute]
 
             result = await c.call_tool("get_cards", {"list_id": "list1"})
-            assert "Fix bug" in result.content[0].text
+            assert "Fix bug" in result.content[0].text  # pyrefly: ignore [missing-attribute]
 
             result = await c.call_tool("get_card", {"card_id": "card1"})
-            assert "Fix bug" in result.content[0].text
-            assert "Doing" in result.content[0].text
+            assert "Fix bug" in result.content[0].text  # pyrefly: ignore [missing-attribute]
+            assert "Doing" in result.content[0].text  # pyrefly: ignore [missing-attribute]
 
             result = await c.call_tool(
                 "create_card", {"list_id": "list1", "name": "New"}
             )
-            assert "Card created" in result.content[0].text
+            assert "Card created" in result.content[0].text  # pyrefly: ignore [missing-attribute]
 
             result = await c.call_tool(
                 "update_card", {"card_id": "card1", "name": "Updated"}
             )
-            assert "Card updated" in result.content[0].text
+            assert "Card updated" in result.content[0].text  # pyrefly: ignore [missing-attribute]
 
             result = await c.call_tool("archive_card", {"card_id": "card1"})
-            assert "Card archived" in result.content[0].text
+            assert "Card archived" in result.content[0].text  # pyrefly: ignore [missing-attribute]
 
             result = await c.call_tool(
                 "add_comment", {"card_id": "card1", "text": "Nice!"}
             )
-            assert "Comment added" in result.content[0].text
+            assert "Comment added" in result.content[0].text  # pyrefly: ignore [missing-attribute]
 
             result = await c.call_tool("search_cards", {"query": "bug"})
-            assert "Fix bug" in result.content[0].text
+            assert "Fix bug" in result.content[0].text  # pyrefly: ignore [missing-attribute]

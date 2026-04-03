@@ -1,9 +1,10 @@
-import pytest
 from unittest.mock import patch
+
+import pytest
 
 from trello_mcp.client import TrelloAPIError
 from trello_mcp.models import Board, TrelloList
-from trello_mcp.tools.boards import get_boards, get_board, get_lists
+from trello_mcp.tools.boards import get_board, get_boards, get_lists
 
 
 class TestGetBoards:

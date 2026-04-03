@@ -1,5 +1,6 @@
-import pytest
 from unittest.mock import AsyncMock
+
+import pytest
 
 from trello_mcp.client import TrelloClient
 from trello_mcp.models import Board, Card, Comment, Label, Member, TrelloList
@@ -59,7 +60,5 @@ def sample_comment():
         id="com1",
         text="Great progress!",
         date="2026-04-01T12:00:00.000Z",
-        member_creator=Member(
-            id="mem1", username="james", full_name="James Andrews"
-        ),
+        member_creator=Member(id="mem1", username="james", full_name="James Andrews"),
     )

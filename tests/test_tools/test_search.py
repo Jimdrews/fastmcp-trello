@@ -1,5 +1,6 @@
-import pytest
 from unittest.mock import patch
+
+import pytest
 
 from trello_mcp.client import TrelloAPIError
 from trello_mcp.models import Card
@@ -58,7 +59,7 @@ class TestSearchCards:
     async def test_search_scoped_to_board(self, mock_client):
         mock_client.search_cards.return_value = []
         with patch("trello_mcp.server.get_client", return_value=mock_client):
-            result = await search_cards("login", board_id="board1")
+            await search_cards("login", board_id="board1")
         mock_client.search_cards.assert_called_once_with("login", board_id="board1")
 
     @pytest.mark.asyncio

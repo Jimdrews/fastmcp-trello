@@ -71,7 +71,7 @@ class Card(BaseModel):
         if self.due:
             lines.append(f"- **Due:** {self.due[:10]}")
         if self.labels:
-            label_str = ", ".join(l.to_markdown() for l in self.labels)
+            label_str = ", ".join(lbl.to_markdown() for lbl in self.labels)
             lines.append(f"- **Labels:** {label_str}")
         if self.members:
             member_str = ", ".join(m.to_markdown() for m in self.members)
@@ -91,7 +91,7 @@ class Card(BaseModel):
         if self.due:
             parts.append(f"due {self.due[:10]}")
         if self.labels:
-            label_str = ", ".join(l.to_markdown() for l in self.labels)
+            label_str = ", ".join(lbl.to_markdown() for lbl in self.labels)
             parts.append(f"labels: {label_str}")
         return " — ".join(parts)
 
