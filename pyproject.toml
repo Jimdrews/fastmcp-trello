@@ -49,6 +49,11 @@ target-version = "py312"
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP"]
 
+[tool.semantic_release]
+version_toml = ["pyproject.toml:project.version"]
+branch = "main"
+commit_message = "chore: release {version}"
+
 [dependency-groups]
 dev = [
     "pre-commit>=4.5.1",
