@@ -27,8 +27,9 @@ A Trello MCP server — manage boards, cards, and lists from any AI assistant th
 You need a Trello API key and token:
 
 1. Go to the [Trello Power-Ups admin page](https://trello.com/power-ups/admin)
-2. Get your API key
-3. From that page, generate a token
+2. Create a new Power-Up (any name/workspace will do)
+3. Generate a new API key
+4. From the API key page, click the **Token** link to generate a token
 
 ## Installation
 
