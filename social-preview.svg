@@ -1,0 +1,136 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="640" viewBox="0 0 1280 640">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0c1220"/>
+      <stop offset="50%" style="stop-color:#172042"/>
+      <stop offset="100%" style="stop-color:#0c1220"/>
+    </linearGradient>
+    <linearGradient id="glow" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#0079BF;stop-opacity:0"/>
+      <stop offset="50%" style="stop-color:#0079BF;stop-opacity:0.3"/>
+      <stop offset="100%" style="stop-color:#0079BF;stop-opacity:0"/>
+    </linearGradient>
+    <linearGradient id="cardGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e2a4a"/>
+      <stop offset="100%" style="stop-color:#15203a"/>
+    </linearGradient>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#000" flood-opacity="0.4"/>
+    </filter>
+    <filter id="glowFilter">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1280" height="640" fill="url(#bg)"/>
+
+  <!-- Subtle grid pattern -->
+  <g opacity="0.03">
+    <line x1="0" y1="80" x2="1280" y2="80" stroke="white" stroke-width="1"/>
+    <line x1="0" y1="160" x2="1280" y2="160" stroke="white" stroke-width="1"/>
+    <line x1="0" y1="240" x2="1280" y2="240" stroke="white" stroke-width="1"/>
+    <line x1="0" y1="320" x2="1280" y2="320" stroke="white" stroke-width="1"/>
+    <line x1="0" y1="400" x2="1280" y2="400" stroke="white" stroke-width="1"/>
+    <line x1="0" y1="480" x2="1280" y2="480" stroke="white" stroke-width="1"/>
+    <line x1="0" y1="560" x2="1280" y2="560" stroke="white" stroke-width="1"/>
+    <line x1="160" y1="0" x2="160" y2="640" stroke="white" stroke-width="1"/>
+    <line x1="320" y1="0" x2="320" y2="640" stroke="white" stroke-width="1"/>
+    <line x1="480" y1="0" x2="480" y2="640" stroke="white" stroke-width="1"/>
+    <line x1="640" y1="0" x2="640" y2="640" stroke="white" stroke-width="1"/>
+    <line x1="800" y1="0" x2="800" y2="640" stroke="white" stroke-width="1"/>
+    <line x1="960" y1="0" x2="960" y2="640" stroke="white" stroke-width="1"/>
+    <line x1="1120" y1="0" x2="1120" y2="640" stroke="white" stroke-width="1"/>
+  </g>
+
+  <!-- Decorative glow line -->
+  <rect x="0" y="316" width="1280" height="3" fill="url(#glow)" opacity="0.5"/>
+
+  <!-- Left side: Mini Trello board mockup -->
+  <g transform="translate(80, 160)" opacity="0.6">
+    <!-- Board column 1 -->
+    <rect x="0" y="0" width="120" height="300" rx="8" fill="#1a2744" filter="url(#shadow)"/>
+    <rect x="8" y="8" width="104" height="16" rx="4" fill="#0079BF" opacity="0.6"/>
+    <rect x="8" y="32" width="104" height="48" rx="4" fill="#243352"/>
+    <rect x="8" y="88" width="104" height="36" rx="4" fill="#243352"/>
+    <rect x="8" y="132" width="104" height="56" rx="4" fill="#243352"/>
+    <!-- Green label on a card -->
+    <rect x="14" y="38" width="32" height="6" rx="3" fill="#61BD4F"/>
+    <rect x="14" y="94" width="24" height="6" rx="3" fill="#F2D600"/>
+    <rect x="14" y="138" width="40" height="6" rx="3" fill="#FF9F1A"/>
+
+    <!-- Board column 2 -->
+    <rect x="130" y="0" width="120" height="300" rx="8" fill="#1a2744" filter="url(#shadow)"/>
+    <rect x="138" y="8" width="104" height="16" rx="4" fill="#61BD4F" opacity="0.6"/>
+    <rect x="138" y="32" width="104" height="40" rx="4" fill="#243352"/>
+    <rect x="138" y="80" width="104" height="64" rx="4" fill="#243352"/>
+    <rect x="138" y="152" width="104" height="44" rx="4" fill="#243352"/>
+    <rect x="144" y="38" width="28" height="6" rx="3" fill="#0079BF"/>
+    <rect x="144" y="86" width="36" height="6" rx="3" fill="#EB5A46"/>
+
+    <!-- Board column 3 -->
+    <rect x="260" y="0" width="120" height="300" rx="8" fill="#1a2744" filter="url(#shadow)"/>
+    <rect x="268" y="8" width="104" height="16" rx="4" fill="#C377E0" opacity="0.6"/>
+    <rect x="268" y="32" width="104" height="52" rx="4" fill="#243352"/>
+    <rect x="268" y="92" width="104" height="44" rx="4" fill="#243352"/>
+    <rect x="274" y="38" width="20" height="6" rx="3" fill="#61BD4F"/>
+    <rect x="298" y="38" width="20" height="6" rx="3" fill="#F2D600"/>
+  </g>
+
+  <!-- Connection lines from board to text (AI flow) -->
+  <g opacity="0.15">
+    <path d="M 470 310 Q 520 310 550 290" stroke="#0079BF" stroke-width="2" fill="none" stroke-dasharray="6,4"/>
+    <path d="M 470 320 Q 530 320 560 320" stroke="#0079BF" stroke-width="2" fill="none" stroke-dasharray="6,4"/>
+    <path d="M 470 330 Q 520 330 550 350" stroke="#0079BF" stroke-width="2" fill="none" stroke-dasharray="6,4"/>
+  </g>
+
+  <!-- AI sparkle icon -->
+  <g transform="translate(560, 300)" opacity="0.3" filter="url(#glowFilter)">
+    <path d="M 16 0 L 20 12 L 32 16 L 20 20 L 16 32 L 12 20 L 0 16 L 12 12 Z" fill="#64ffda"/>
+  </g>
+
+  <!-- Main content area -->
+  <g transform="translate(640, 0)">
+    <!-- Title -->
+    <text x="280" y="220" font-family="system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="64" font-weight="800" fill="white" text-anchor="middle" letter-spacing="-1">fastmcp-trello</text>
+
+    <!-- Subtitle -->
+    <text x="280" y="270" font-family="system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="26" fill="#8892b0" text-anchor="middle" font-weight="400">Trello MCP Server for AI Assistants</text>
+
+    <!-- Description -->
+    <text x="280" y="325" font-family="system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="20" fill="#a8b2d1" text-anchor="middle">Manage boards, cards, and lists</text>
+    <text x="280" y="353" font-family="system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="20" fill="#a8b2d1" text-anchor="middle">from Claude, Cursor, Copilot, and more</text>
+
+    <!-- Tag pills -->
+    <g transform="translate(280, 420)">
+      <!-- Python pill -->
+      <rect x="-195" y="-16" width="90" height="32" rx="16" fill="#3776AB" opacity="0.2" stroke="#3776AB" stroke-width="1" stroke-opacity="0.4"/>
+      <text x="-150" y="6" font-family="system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="15" fill="#5B9BD5" text-anchor="middle" font-weight="600">Python</text>
+
+      <!-- MCP pill -->
+      <rect x="-65" y="-16" width="70" height="32" rx="16" fill="#64ffda" opacity="0.1" stroke="#64ffda" stroke-width="1" stroke-opacity="0.3"/>
+      <text x="-30" y="6" font-family="system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="15" fill="#64ffda" text-anchor="middle" font-weight="600">MCP</text>
+
+      <!-- FastMCP pill -->
+      <rect x="40" y="-16" width="100" height="32" rx="16" fill="#FF6B6B" opacity="0.15" stroke="#FF6B6B" stroke-width="1" stroke-opacity="0.3"/>
+      <text x="90" y="6" font-family="system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="15" fill="#FF8A8A" text-anchor="middle" font-weight="600">FastMCP</text>
+
+      <!-- MIT pill -->
+      <rect x="175" y="-16" width="70" height="32" rx="16" fill="#F2D600" opacity="0.12" stroke="#F2D600" stroke-width="1" stroke-opacity="0.3"/>
+      <text x="210" y="6" font-family="system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="15" fill="#F2D600" text-anchor="middle" font-weight="600">MIT</text>
+    </g>
+
+    <!-- Install hint -->
+    <g transform="translate(280, 490)">
+      <rect x="-130" y="-16" width="260" height="32" rx="6" fill="#0d1117" stroke="#30363d" stroke-width="1"/>
+      <text x="0" y="5" font-family="'SF Mono', 'Fira Code', 'Cascadia Code', monospace, monospace" font-size="14" fill="#7ee787" text-anchor="middle">$ uvx fastmcp-trello</text>
+    </g>
+  </g>
+
+  <!-- Bottom accent line -->
+  <rect x="0" y="634" width="1280" height="6" fill="#0079BF" opacity="0.8"/>
+</svg>

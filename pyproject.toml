@@ -8,7 +8,7 @@ authors = [
 ]
 license = "MIT"
 requires-python = ">=3.12"
-keywords = ["trello", "mcp", "model-context-protocol", "ai", "agents"]
+keywords = ["trello", "mcp", "model-context-protocol", "ai", "agents", "claude", "cursor", "copilot", "fastmcp", "automation", "project-management"]
 classifiers = [
     "Development Status :: 4 - Beta",
     "License :: OSI Approved :: MIT License",
@@ -22,6 +22,7 @@ dependencies = [
 ]
 
 [project.urls]
+Homepage = "https://github.com/Jimdrews/fastmcp-trello"
 Repository = "https://github.com/Jimdrews/fastmcp-trello"
 Issues = "https://github.com/Jimdrews/fastmcp-trello/issues"
 

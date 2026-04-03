@@ -1,13 +1,15 @@
-# fastmcp-trello
+<p align="center">
+  <img src="banner.svg" alt="fastmcp-trello" width="100%">
+</p>
 
-[![PyPI](https://img.shields.io/pypi/v/fastmcp-trello)](https://pypi.org/project/fastmcp-trello/)
-[![Python](https://img.shields.io/pypi/pyversions/fastmcp-trello)](https://pypi.org/project/fastmcp-trello/)
+[![PyPI](https://badge.fury.io/py/fastmcp-trello.svg)](https://pypi.org/project/fastmcp-trello/)
+[![Python](https://img.shields.io/pypi/pyversions/fastmcp-trello?style=flat)](https://pypi.org/project/fastmcp-trello/)
 [![CI](https://github.com/Jimdrews/fastmcp-trello/actions/workflows/ci.yml/badge.svg)](https://github.com/Jimdrews/fastmcp-trello/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-A Trello MCP server — manage boards, cards, and lists from any AI assistant that supports the [Model Context Protocol](https://modelcontextprotocol.io).
+A Trello MCP server — manage boards, cards, and lists from any AI assistant that supports the [Model Context Protocol](https://modelcontextprotocol.io). MCP is an open standard that lets AI assistants like Claude, Cursor, and Copilot interact with external tools and services.
 
-## Available Tools
+## Trello MCP Tools
 
 | Tool | Description |
 |---|---|
