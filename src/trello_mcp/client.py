@@ -37,7 +37,10 @@ class TrelloClient:
             raise TrelloAPIError(_ERROR_MESSAGES[response.status_code])
         if response.status_code >= 500:
             raise TrelloAPIError("Trello API error. Please try again.")
-        response.raise_for_status()
+        if response.status_code >= 400:
+            raise TrelloAPIError(
+                f"Trello request failed (HTTP {response.status_code})."
+            )
         return response
 
     # --- Boards ---

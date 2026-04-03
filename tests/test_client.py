@@ -54,6 +54,31 @@ class TestErrorHandling:
             with pytest.raises(TrelloAPIError, match="Trello API error"):
                 await client.get_boards()
 
+    @pytest.mark.asyncio
+    async def test_unhandled_4xx_error(self, client, httpx_mock: HTTPXMock):
+        httpx_mock.add_response(status_code=400)
+        async with client:
+            with pytest.raises(
+                TrelloAPIError, match=r"Trello request failed \(HTTP 400\)"
+            ):
+                await client.get_boards()
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize(
+        "status_code", [400, 401, 403, 404, 409, 422, 429, 500, 502, 503]
+    )
+    async def test_error_messages_never_contain_credentials(
+        self, status_code, httpx_mock: HTTPXMock
+    ):
+        httpx_mock.add_response(status_code=status_code)
+        client = TrelloClient(api_key="test_key", token="test_token")
+        async with client:
+            with pytest.raises(TrelloAPIError) as exc_info:
+                await client.get_boards()
+        message = str(exc_info.value)
+        assert "test_key" not in message, f"API key leaked in {status_code} error"
+        assert "test_token" not in message, f"Token leaked in {status_code} error"
+
 
 class TestGetBoards:
     @pytest.mark.asyncio
