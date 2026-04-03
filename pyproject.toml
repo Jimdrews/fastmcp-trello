@@ -1,17 +1,32 @@
 [project]
-name = "trello-mcp"
+name = "fastmcp-trello"
 version = "0.1.0"
 description = "A Trello MCP server built with FastMCP"
 readme = "README.md"
 authors = [
     { name = "James Andrews", email = "james.andrews.dev@gmail.com" }
 ]
+license = "MIT"
 requires-python = ">=3.12"
+keywords = ["trello", "mcp", "model-context-protocol", "ai", "agents"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+]
 dependencies = [
     "fastmcp>=3.2.0",
     "httpx>=0.28.1",
     "pydantic>=2.12.5",
 ]
+
+[project.urls]
+Repository = "https://github.com/Jimdrews/fastmcp-trello"
+Issues = "https://github.com/Jimdrews/fastmcp-trello/issues"
+
+[project.scripts]
+fastmcp-trello = "trello_mcp.__main__:main"
 
 [build-system]
 requires = ["hatchling"]
