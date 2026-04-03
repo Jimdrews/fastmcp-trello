@@ -20,6 +20,13 @@ build-backend = "hatchling.build"
 [tool.hatch.build.targets.wheel]
 packages = ["src/trello_mcp"]
 
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+markers = [
+    "live: tests that hit the real Trello API (skipped by default)",
+]
+addopts = "-m 'not live'"
+
 [dependency-groups]
 dev = [
     "pytest>=9.0.2",
