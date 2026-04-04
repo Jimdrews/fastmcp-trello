@@ -50,9 +50,7 @@ You need a Trello API key and token:
 
 ## Installation
 
-### Claude Desktop
-
-Add to your Claude Desktop configuration file (`claude_desktop_config.json`):
+Add the following to your MCP client configuration (Claude Desktop, Cursor, Windsurf, etc.):
 
 ```json
 {
@@ -69,56 +67,10 @@ Add to your Claude Desktop configuration file (`claude_desktop_config.json`):
 }
 ```
 
-### VS Code
-
-Add to your VS Code MCP settings (`.vscode/mcp.json`):
-
-```json
-{
-  "servers": {
-    "trello": {
-      "command": "uvx",
-      "args": ["fastmcp-trello"],
-      "env": {
-        "TRELLO_API_KEY": "your-api-key",
-        "TRELLO_TOKEN": "your-token"
-      }
-    }
-  }
-}
-```
-
-### Cursor
-
-Add to your Cursor MCP settings (`~/.cursor/mcp.json`):
-
-```json
-{
-  "mcpServers": {
-    "trello": {
-      "command": "uvx",
-      "args": ["fastmcp-trello"],
-      "env": {
-        "TRELLO_API_KEY": "your-api-key",
-        "TRELLO_TOKEN": "your-token"
-      }
-    }
-  }
-}
-```
-
-### Standalone
+Or run standalone:
 
 ```bash
-# Run directly (no install needed)
-uvx fastmcp-trello
-
-# Or install globally
-pip install fastmcp-trello
-fastmcp-trello
-
-# Use HTTP transport instead of stdio
-fastmcp-trello --transport http
+TRELLO_API_KEY=your-api-key TRELLO_TOKEN=your-token uvx fastmcp-trello
 ```
 
 ## Usage
@@ -151,4 +103,4 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for more details.
 
 [MIT](LICENSE)
 
-<!-- mcp-name: io.github.jimdrews/fastmcp-trello -->
+<!-- mcp-name: io.github.Jimdrews/fastmcp-trello -->
