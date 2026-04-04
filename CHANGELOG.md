@@ -1,6 +1,26 @@
 # CHANGELOG
 
 
+## v0.3.0 (2026-04-04)
+
+### Bug Fixes
+
+- Add publish job to release workflow
+  ([`0645a43`](https://github.com/Jimdrews/fastmcp-trello/commit/0645a4303b48ace4b5e0d96b4d3bb9501936b301))
+
+The GITHUB_TOKEN used by the release job doesn't trigger other workflows, so publish.yml never
+  fired. Add the publish job directly to release.yml, gated on the semantic-release output.
+
+### Features
+
+- Add MCP registry and directory listing metadata
+  ([`a9824cf`](https://github.com/Jimdrews/fastmcp-trello/commit/a9824cf18a8c1dcab93209229000af3e96dafb25))
+
+Add server.json for the official MCP registry, glama.json for Glama.ai author verification, mcp-name
+  marker in README for PyPI validation, and a registry publishing job in the release workflow via
+  GitHub OIDC.
+
+
 ## v0.2.0 (2026-04-03)
 
 ### Features
