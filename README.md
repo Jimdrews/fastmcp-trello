@@ -135,3 +135,5 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for more details.
 ## License
 
 [MIT](LICENSE)
+
+<!-- mcp-name: io.github.jimdrews/fastmcp-trello -->

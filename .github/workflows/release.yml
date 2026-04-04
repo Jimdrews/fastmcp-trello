@@ -35,3 +35,23 @@ jobs:
       - uses: astral-sh/setup-uv@v6
       - run: uv build
       - run: uv publish
+
+  registry:
+    needs: publish
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Install mcp-publisher
+        run: |
+          curl -sL "https://github.com/modelcontextprotocol/registry/releases/latest/download/mcp-publisher_linux_amd64.tar.gz" | tar xz mcp-publisher
+          chmod +x mcp-publisher
+      - name: Authenticate via GitHub OIDC
+        run: ./mcp-publisher login github-oidc
+      - name: Publish to MCP registry
+        run: ./mcp-publisher publish

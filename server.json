@@ -1,0 +1,36 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.jimdrews/fastmcp-trello",
+  "title": "Trello MCP Server",
+  "description": "Manage Trello boards, lists, and cards from any MCP-compatible AI assistant",
+  "version": "0.2.0",
+  "repository": {
+    "url": "https://github.com/Jimdrews/fastmcp-trello",
+    "source": "github"
+  },
+  "packages": [
+    {
+      "registryType": "pypi",
+      "identifier": "fastmcp-trello",
+      "version": "0.2.0",
+      "runtimeHint": "uvx",
+      "transport": {
+        "type": "stdio"
+      },
+      "environmentVariables": [
+        {
+          "name": "TRELLO_API_KEY",
+          "description": "Trello API key from https://trello.com/power-ups/admin",
+          "isRequired": true,
+          "isSecret": true
+        },
+        {
+          "name": "TRELLO_TOKEN",
+          "description": "Trello API token",
+          "isRequired": true,
+          "isSecret": true
+        }
+      ]
+    }
+  ]
+}
