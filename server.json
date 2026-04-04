@@ -1,6 +1,6 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
-  "name": "io.github.jimdrews/fastmcp-trello",
+  "name": "io.github.Jimdrews/fastmcp-trello",
   "title": "Trello MCP Server",
   "description": "Manage Trello boards, lists, and cards from any MCP-compatible AI assistant",
   "version": "0.3.0",
