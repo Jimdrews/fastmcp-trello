@@ -1,6 +1,19 @@
 # CHANGELOG
 
 
+## v0.4.1 (2026-04-04)
+
+### Bug Fixes
+
+- Trigger version bump for PyPI re-release
+  ([`dea8c8f`](https://github.com/Jimdrews/fastmcp-trello/commit/dea8c8f694454c6513f62f56fec450585ec201a3))
+
+### Documentation
+
+- Simplify installation section in README
+  ([`db09b9b`](https://github.com/Jimdrews/fastmcp-trello/commit/db09b9b16158af586df0e7b8e03a595b8b1a760a))
+
+
 ## v0.4.0 (2026-04-04)
 
 ### Bug Fixes
