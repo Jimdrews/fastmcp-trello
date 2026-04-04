@@ -51,6 +51,7 @@ select = ["E", "F", "I", "UP"]
 
 [tool.semantic_release]
 version_toml = ["pyproject.toml:project.version"]
+version_variables = ["server.json:version"]
 branch = "main"
 commit_message = "chore: release {version}"
 
