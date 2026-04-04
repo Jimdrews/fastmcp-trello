@@ -72,7 +72,7 @@ class Card(TrelloModel):
     url: str | None = None
 
     def to_markdown(self) -> str:
-        lines = [f"## {self.name}"]
+        lines = [f"## {self.name} (id: {self.id})"]
         if self.list_name:
             lines.append(f"- **List:** {self.list_name}")
         if self.board_name:
