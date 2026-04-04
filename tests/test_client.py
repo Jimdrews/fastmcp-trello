@@ -334,6 +334,272 @@ class TestAddComment:
         assert comment.text == "Great progress!"
 
 
+class TestCreateBoard:
+    @pytest.mark.asyncio
+    async def test_create_minimal(self, client, httpx_mock: HTTPXMock):
+        httpx_mock.add_response(
+            json={
+                "id": "board1",
+                "name": "New Board",
+                "url": "https://trello.com/b/new",
+            }
+        )
+        async with client:
+            board = await client.create_board("New Board")
+        assert board.name == "New Board"
+
+    @pytest.mark.asyncio
+    async def test_create_with_desc(self, client, httpx_mock: HTTPXMock):
+        httpx_mock.add_response(
+            json={
+                "id": "board1",
+                "name": "Project X",
+                "url": "https://trello.com/b/new",
+            }
+        )
+        async with client:
+            board = await client.create_board("Project X", desc="A new project")
+        assert board.name == "Project X"
+
+    @pytest.mark.asyncio
+    async def test_create_without_default_lists(self, client, httpx_mock: HTTPXMock):
+        httpx_mock.add_response(
+            json={"id": "board1", "name": "Blank", "url": "https://trello.com/b/new"}
+        )
+        async with client:
+            board = await client.create_board("Blank", default_lists=False)
+        assert board.name == "Blank"
+
+
+class TestUpdateBoard:
+    @pytest.mark.asyncio
+    async def test_update_name(self, client, httpx_mock: HTTPXMock):
+        httpx_mock.add_response(
+            json={"id": "board1", "name": "Renamed", "url": "https://trello.com/b/1"}
+        )
+        async with client:
+            board = await client.update_board("board1", name="Renamed")
+        assert board.name == "Renamed"
+
+    @pytest.mark.asyncio
+    async def test_update_desc(self, client, httpx_mock: HTTPXMock):
+        httpx_mock.add_response(
+            json={"id": "board1", "name": "Board", "url": "https://trello.com/b/1"}
+        )
+        async with client:
+            board = await client.update_board("board1", desc="Updated desc")
+        assert board.name == "Board"
+
+
+class TestCloseBoard:
+    @pytest.mark.asyncio
+    async def test_close(self, client, httpx_mock: HTTPXMock):
+        httpx_mock.add_response(
+            json={
+                "id": "board1",
+                "name": "Closed Board",
+                "url": "https://trello.com/b/1",
+            }
+        )
+        async with client:
+            board = await client.close_board("board1")
+        assert board.name == "Closed Board"
+
+
+class TestCreateList:
+    @pytest.mark.asyncio
+    async def test_create(self, client, httpx_mock: HTTPXMock):
+        httpx_mock.add_response(json={"id": "list1", "name": "Backlog"})
+        async with client:
+            tl = await client.create_list("board1", "Backlog")
+        assert tl.name == "Backlog"
+
+    @pytest.mark.asyncio
+    async def test_create_with_position(self, client, httpx_mock: HTTPXMock):
+        httpx_mock.add_response(json={"id": "list1", "name": "Urgent"})
+        async with client:
+            tl = await client.create_list("board1", "Urgent", position="top")
+        assert tl.name == "Urgent"
+
+
+class TestUpdateList:
+    @pytest.mark.asyncio
+    async def test_rename(self, client, httpx_mock: HTTPXMock):
+        httpx_mock.add_response(json={"id": "list1", "name": "Renamed"})
+        async with client:
+            tl = await client.update_list("list1", "Renamed")
+        assert tl.name == "Renamed"
+
+
+class TestArchiveList:
+    @pytest.mark.asyncio
+    async def test_archive(self, client, httpx_mock: HTTPXMock):
+        httpx_mock.add_response(json={"id": "list1", "name": "Old List"})
+        async with client:
+            tl = await client.archive_list("list1")
+        assert tl.name == "Old List"
+        request = httpx_mock.get_request()
+        assert "lists/list1/closed" in str(request.url)  # pyrefly: ignore [missing-attribute]
+
+
+class TestMoveList:
+    @pytest.mark.asyncio
+    async def test_move_to_top(self, client, httpx_mock: HTTPXMock):
+        httpx_mock.add_response(json={"id": "list1", "name": "Moved"})
+        async with client:
+            tl = await client.move_list("list1", "top")
+        assert tl.name == "Moved"
+
+    @pytest.mark.asyncio
+    async def test_move_to_position(self, client, httpx_mock: HTTPXMock):
+        httpx_mock.add_response(json={"id": "list1", "name": "Moved"})
+        async with client:
+            tl = await client.move_list("list1", "2048")
+        assert tl.name == "Moved"
+
+
+class TestGetLabels:
+    @pytest.mark.asyncio
+    async def test_returns_labels(self, client, httpx_mock: HTTPXMock):
+        httpx_mock.add_response(
+            json=[
+                {"id": "lab1", "name": "bug", "color": "red"},
+                {"id": "lab2", "name": "feature", "color": "green"},
+            ]
+        )
+        async with client:
+            labels = await client.get_labels("board1")
+        assert len(labels) == 2
+        assert labels[0].name == "bug"
+        assert labels[1].color == "green"
+
+    @pytest.mark.asyncio
+    async def test_empty_labels(self, client, httpx_mock: HTTPXMock):
+        httpx_mock.add_response(json=[])
+        async with client:
+            labels = await client.get_labels("board1")
+        assert labels == []
+
+
+class TestCreateLabel:
+    @pytest.mark.asyncio
+    async def test_create_with_color(self, client, httpx_mock: HTTPXMock):
+        httpx_mock.add_response(json={"id": "lab1", "name": "urgent", "color": "red"})
+        async with client:
+            label = await client.create_label("board1", "urgent", color="red")
+        assert label.name == "urgent"
+        assert label.color == "red"
+
+    @pytest.mark.asyncio
+    async def test_create_without_color(self, client, httpx_mock: HTTPXMock):
+        httpx_mock.add_response(json={"id": "lab1", "name": "misc", "color": None})
+        async with client:
+            label = await client.create_label("board1", "misc")
+        assert label.name == "misc"
+
+
+class TestDeleteLabel:
+    @pytest.mark.asyncio
+    async def test_delete(self, client, httpx_mock: HTTPXMock):
+        httpx_mock.add_response(json={})
+        async with client:
+            await client.delete_label("lab1")
+        request = httpx_mock.get_request()
+        assert "labels/lab1" in str(request.url)  # pyrefly: ignore [missing-attribute]
+
+
+class TestAddLabelToCard:
+    @pytest.mark.asyncio
+    async def test_add_label(self, client, httpx_mock: HTTPXMock):
+        httpx_mock.add_response(json=[{"id": "lab1"}])
+        async with client:
+            await client.add_label_to_card("card1", "lab1")
+        request = httpx_mock.get_request()
+        assert "cards/card1/idLabels" in str(request.url)  # pyrefly: ignore [missing-attribute]
+
+
+class TestRemoveLabelFromCard:
+    @pytest.mark.asyncio
+    async def test_remove_label(self, client, httpx_mock: HTTPXMock):
+        httpx_mock.add_response(json={})
+        async with client:
+            await client.remove_label_from_card("card1", "lab1")
+        request = httpx_mock.get_request()
+        assert "cards/card1/idLabels/lab1" in str(request.url)  # pyrefly: ignore [missing-attribute]
+
+
+class TestGetAttachments:
+    @pytest.mark.asyncio
+    async def test_returns_attachments(self, client, httpx_mock: HTTPXMock):
+        httpx_mock.add_response(
+            json=[
+                {
+                    "id": "att1",
+                    "name": "screenshot.png",
+                    "url": "https://example.com/screenshot.png",
+                    "date": "2026-04-01T10:00:00.000Z",
+                    "bytes": 204800,
+                },
+            ]
+        )
+        async with client:
+            attachments = await client.get_attachments("card1")
+        assert len(attachments) == 1
+        assert attachments[0].name == "screenshot.png"
+        assert attachments[0].bytes == 204800
+
+    @pytest.mark.asyncio
+    async def test_empty_attachments(self, client, httpx_mock: HTTPXMock):
+        httpx_mock.add_response(json=[])
+        async with client:
+            attachments = await client.get_attachments("card1")
+        assert attachments == []
+
+
+class TestAddAttachment:
+    @pytest.mark.asyncio
+    async def test_add_with_url(self, client, httpx_mock: HTTPXMock):
+        httpx_mock.add_response(
+            json={
+                "id": "att1",
+                "name": "example.com",
+                "url": "https://example.com",
+                "date": "2026-04-01T10:00:00.000Z",
+                "bytes": None,
+            }
+        )
+        async with client:
+            att = await client.add_attachment("card1", "https://example.com")
+        assert att.url == "https://example.com"
+
+    @pytest.mark.asyncio
+    async def test_add_with_name(self, client, httpx_mock: HTTPXMock):
+        httpx_mock.add_response(
+            json={
+                "id": "att1",
+                "name": "My Link",
+                "url": "https://example.com",
+                "date": "2026-04-01T10:00:00.000Z",
+                "bytes": None,
+            }
+        )
+        async with client:
+            att = await client.add_attachment(
+                "card1", "https://example.com", name="My Link"
+            )
+        assert att.name == "My Link"
+
+
+class TestDeleteAttachment:
+    @pytest.mark.asyncio
+    async def test_delete(self, client, httpx_mock: HTTPXMock):
+        httpx_mock.add_response(json={})
+        async with client:
+            await client.delete_attachment("card1", "att1")
+        request = httpx_mock.get_request()
+        assert "cards/card1/attachments/att1" in str(request.url)  # pyrefly: ignore [missing-attribute]
+
+
 class TestSearchCards:
     @pytest.mark.asyncio
     async def test_search(self, client, httpx_mock: HTTPXMock):

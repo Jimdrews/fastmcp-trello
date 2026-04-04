@@ -3,7 +3,15 @@ from unittest.mock import AsyncMock
 import pytest
 
 from trello_mcp.client import TrelloClient
-from trello_mcp.models import Board, Card, Comment, Label, Member, TrelloList
+from trello_mcp.models import (
+    Attachment,
+    Board,
+    Card,
+    Comment,
+    Label,
+    Member,
+    TrelloList,
+)
 
 
 @pytest.fixture
@@ -61,4 +69,20 @@ def sample_comment():
         text="Great progress!",
         date="2026-04-01T12:00:00.000Z",
         member_creator=Member(id="mem1", username="james", full_name="James Andrews"),
+    )
+
+
+@pytest.fixture
+def sample_label():
+    return Label(id="lab1", name="bug", color="red")
+
+
+@pytest.fixture
+def sample_attachment():
+    return Attachment(
+        id="att1",
+        name="screenshot.png",
+        url="https://example.com/screenshot.png",
+        date="2026-04-01T10:00:00.000Z",
+        bytes=204800,
     )

@@ -3,17 +3,33 @@ from __future__ import annotations
 from pydantic import BaseModel, Field
 
 
-class Label(BaseModel):
+class TrelloModel(BaseModel):
     id: str
+
+    def to_markdown(self) -> str:
+        parts = []
+        for name, value in self:
+            if name == "id" or value is None:
+                continue
+            if isinstance(value, bool) and not value:
+                continue
+            if isinstance(value, list):
+                if not value:
+                    continue
+                if hasattr(value[0], "to_markdown"):
+                    value = ", ".join(v.to_markdown() for v in value)
+                else:
+                    value = ", ".join(str(v) for v in value)
+            parts.append(f"**{name}:** {value}")
+        return f"(id: {self.id}) " + " | ".join(parts) if parts else f"(id: {self.id})"
+
+
+class Label(TrelloModel):
     name: str = ""
     color: str | None = None
 
-    def to_markdown(self) -> str:
-        return self.name if self.name else (self.color or "")
 
-
-class Member(BaseModel):
-    id: str
+class Member(TrelloModel):
     username: str
     full_name: str = ""
 
@@ -21,8 +37,7 @@ class Member(BaseModel):
         return f"@{self.username}"
 
 
-class Comment(BaseModel):
-    id: str
+class Comment(TrelloModel):
     text: str
     date: str
     member_creator: Member
@@ -32,25 +47,19 @@ class Comment(BaseModel):
         return f"**{self.member_creator.to_markdown()}** ({date_short}): {self.text}"
 
 
-class TrelloList(BaseModel):
-    id: str
+class Attachment(TrelloModel):
+    name: str
+    url: str
+    date: str
+    bytes: int | None = None
+
+
+class TrelloList(TrelloModel):
     name: str
     card_count: int | None = None
 
-    def to_markdown(self) -> str:
-        if self.card_count is not None:
-            return f"- **{self.name}** ({self.card_count} cards)"
-        return f"- **{self.name}**"
 
-    def to_compact_markdown(self) -> str:
-        parts = [f"**{self.name}** (id: {self.id})"]
-        if self.card_count is not None:
-            parts.append(f"{self.card_count} cards")
-        return " — ".join(parts)
-
-
-class Card(BaseModel):
-    id: str
+class Card(TrelloModel):
     name: str
     desc: str | None = None
     due: str | None = None
@@ -86,34 +95,8 @@ class Card(BaseModel):
                 lines.append(f"{i}. {c.to_markdown()}")
         return "\n".join(lines)
 
-    def to_compact_markdown(self) -> str:
-        parts = [f"**{self.name}** (id: {self.id})"]
-        if self.due:
-            parts.append(f"due {self.due[:10]}")
-        if self.labels:
-            label_str = ", ".join(lbl.to_markdown() for lbl in self.labels)
-            parts.append(f"labels: {label_str}")
-        return " — ".join(parts)
 
-
-class Board(BaseModel):
-    id: str
+class Board(TrelloModel):
     name: str
     url: str | None = None
     lists: list[TrelloList] = Field(default_factory=list)
-
-    def to_markdown(self) -> str:
-        lines = [f"## {self.name}"]
-        if self.url:
-            lines.append(f"- **URL:** {self.url}")
-        if self.lists:
-            lines.append(f"\n### Lists ({len(self.lists)})")
-            for tl in self.lists:
-                lines.append(tl.to_markdown())
-        return "\n".join(lines)
-
-    def to_compact_markdown(self) -> str:
-        parts = [f"**{self.name}** (id: {self.id})"]
-        if self.lists:
-            parts.append(f"{len(self.lists)} lists")
-        return " — ".join(parts)

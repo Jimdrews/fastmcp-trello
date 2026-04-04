@@ -1,6 +1,14 @@
 import pytest
 
-from trello_mcp.models import Board, Card, Comment, Label, Member, TrelloList
+from trello_mcp.models import (
+    Attachment,
+    Board,
+    Card,
+    Comment,
+    Label,
+    Member,
+    TrelloList,
+)
 
 
 class TestLabel:
@@ -16,11 +24,15 @@ class TestLabel:
 
     def test_to_markdown(self):
         label = Label(id="lab1", name="bug", color="red")
-        assert label.to_markdown() == "bug"
+        md = label.to_markdown()
+        assert "lab1" in md
+        assert "bug" in md
+        assert "red" in md
 
     def test_to_markdown_no_name(self):
         label = Label(id="lab1", name="", color="red")
-        assert label.to_markdown() == "red"
+        md = label.to_markdown()
+        assert "red" in md
 
 
 class TestMember:
@@ -59,6 +71,44 @@ class TestComment:
         assert "@james" in md
         assert "Fixed the bug" in md
         assert "2026-03-28" in md
+
+
+class TestAttachment:
+    def test_parse(self):
+        att = Attachment(
+            id="att1",
+            name="screenshot.png",
+            url="https://example.com/screenshot.png",
+            date="2026-04-01T10:00:00.000Z",
+            bytes=204800,
+        )
+        assert att.name == "screenshot.png"
+        assert att.bytes == 204800
+
+    def test_to_markdown(self):
+        att = Attachment(
+            id="att1",
+            name="screenshot.png",
+            url="https://example.com/screenshot.png",
+            date="2026-04-01T10:00:00.000Z",
+            bytes=204800,
+        )
+        md = att.to_markdown()
+        assert "att1" in md
+        assert "screenshot.png" in md
+        assert "https://example.com/screenshot.png" in md
+        assert "2026-04-01" in md
+
+    def test_to_markdown_no_bytes(self):
+        att = Attachment(
+            id="att1",
+            name="doc.pdf",
+            url="https://example.com/doc.pdf",
+            date="2026-04-01T10:00:00.000Z",
+        )
+        md = att.to_markdown()
+        assert "doc.pdf" in md
+        assert "att1" in md
 
 
 class TestTrelloList:
@@ -145,12 +195,6 @@ class TestCard:
         # Should not have empty sections
         assert "Labels" not in md or "None" not in md
 
-    def test_compact_markdown(self, full_card):
-        md = full_card.to_compact_markdown()
-        # Compact should be a single line with key info
-        assert "Fix login timeout" in md
-        assert "card1" in md
-
 
 class TestBoard:
     @pytest.fixture
@@ -176,7 +220,8 @@ class TestBoard:
 
     def test_to_markdown(self, board):
         md = board.to_markdown()
-        assert "## Sprint 42" in md
+        assert "Sprint 42" in md
+        assert "board1" in md
         assert "To Do" in md
         assert "Doing" in md
         assert "Done" in md
@@ -184,8 +229,3 @@ class TestBoard:
     def test_to_markdown_empty(self, empty_board):
         md = empty_board.to_markdown()
         assert "Empty Board" in md
-
-    def test_compact_markdown(self, board):
-        md = board.to_compact_markdown()
-        assert "Sprint 42" in md
-        assert "board1" in md

@@ -36,7 +36,7 @@ async def search_cards(query: str, board_id: str | None = None) -> str:
         return "No cards found matching your search."
     lines = [f"## Search Results ({len(cards)})", ""]
     for c in cards:
-        parts = [c.to_compact_markdown()]
+        parts = [c.to_markdown()]
         if c.board_name:
             parts.append(f"board: {c.board_name}")
         if c.list_name:

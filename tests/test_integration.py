@@ -70,20 +70,41 @@ def mock_client():
 
 @pytest.mark.asyncio
 async def test_all_tools_through_mcp(mock_client):
-    """Verify all 10 tools are callable through the MCP protocol."""
+    """Verify all 25 tools are callable through the MCP protocol."""
     with patch("trello_mcp.server.get_client", return_value=mock_client):
         async with Client(transport=mcp) as c:
             tools = await c.list_tools()
             tool_names = {t.name for t in tools}
             assert tool_names == {
+                # Boards
                 "get_boards",
                 "get_board",
                 "get_lists",
+                "create_board",
+                "update_board",
+                "close_board",
+                # Cards
                 "get_cards",
                 "get_card",
                 "create_card",
                 "update_card",
                 "archive_card",
+                # Labels
+                "get_labels",
+                "create_label",
+                "delete_label",
+                "add_label_to_card",
+                "remove_label_from_card",
+                # Lists
+                "create_list",
+                "update_list",
+                "archive_list",
+                "move_list",
+                # Attachments
+                "get_attachments",
+                "add_attachment",
+                "delete_attachment",
+                # Search & Comments
                 "add_comment",
                 "search_cards",
             }

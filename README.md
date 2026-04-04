@@ -16,11 +16,26 @@ A Trello MCP server — manage boards, cards, and lists from any AI assistant th
 | `get_boards` | List all boards accessible to you |
 | `get_board` | Get a board's details including its lists |
 | `get_lists` | Get all open lists on a board |
+| `create_board` | Create a new board |
+| `update_board` | Update a board's name or description |
+| `close_board` | Close (archive) a board |
 | `get_cards` | Get all cards in a list |
 | `get_card` | Get full details for a card including comments |
 | `create_card` | Create a new card on a list |
 | `update_card` | Update a card's fields or move it to a different list |
 | `archive_card` | Archive (close) a card |
+| `get_labels` | Get all labels defined on a board |
+| `create_label` | Create a new label on a board |
+| `delete_label` | Delete a label from a board |
+| `add_label_to_card` | Add a label to a card |
+| `remove_label_from_card` | Remove a label from a card |
+| `create_list` | Create a new list on a board |
+| `update_list` | Rename a list |
+| `archive_list` | Archive (close) a list |
+| `move_list` | Move a list to a new position |
+| `get_attachments` | Get all attachments on a card |
+| `add_attachment` | Add a URL attachment to a card |
+| `delete_attachment` | Delete an attachment from a card |
 | `add_comment` | Add a comment to a card |
 | `search_cards` | Search for cards across boards, optionally scoped to a specific board |
 

@@ -4,7 +4,15 @@ from typing import Any
 
 import httpx
 
-from trello_mcp.models import Board, Card, Comment, Label, Member, TrelloList
+from trello_mcp.models import (
+    Attachment,
+    Board,
+    Card,
+    Comment,
+    Label,
+    Member,
+    TrelloList,
+)
 
 
 class TrelloAPIError(Exception):
@@ -64,11 +72,68 @@ class TrelloClient:
             lists=lists,
         )
 
+    async def create_board(
+        self, name: str, desc: str | None = None, default_lists: bool = True
+    ) -> Board:
+        default = str(default_lists).lower()
+        data: dict[str, str] = {"name": name, "defaultLists": default}
+        if desc is not None:
+            data["desc"] = desc
+        resp = await self._request("POST", "boards", data=data)
+        d = resp.json()
+        return Board(id=d["id"], name=d["name"], url=d.get("url"))
+
+    async def update_board(
+        self, board_id: str, name: str | None = None, desc: str | None = None
+    ) -> Board:
+        data: dict[str, str] = {}
+        if name is not None:
+            data["name"] = name
+        if desc is not None:
+            data["desc"] = desc
+        resp = await self._request("PUT", f"boards/{board_id}", data=data)
+        d = resp.json()
+        return Board(id=d["id"], name=d["name"], url=d.get("url"))
+
+    async def close_board(self, board_id: str) -> Board:
+        resp = await self._request("PUT", f"boards/{board_id}", data={"closed": "true"})
+        d = resp.json()
+        return Board(id=d["id"], name=d["name"], url=d.get("url"))
+
     async def get_lists(self, board_id: str) -> list[TrelloList]:
         resp = await self._request(
             "GET", f"boards/{board_id}/lists", params={"filter": "open"}
         )
         return [TrelloList(id=item["id"], name=item["name"]) for item in resp.json()]
+
+    # --- Lists ---
+
+    async def create_list(
+        self, board_id: str, name: str, position: str | None = None
+    ) -> TrelloList:
+        data: dict[str, str] = {"idBoard": board_id, "name": name}
+        if position is not None:
+            data["pos"] = position
+        resp = await self._request("POST", "lists", data=data)
+        item = resp.json()
+        return TrelloList(id=item["id"], name=item["name"])
+
+    async def update_list(self, list_id: str, name: str) -> TrelloList:
+        resp = await self._request("PUT", f"lists/{list_id}", data={"name": name})
+        item = resp.json()
+        return TrelloList(id=item["id"], name=item["name"])
+
+    async def archive_list(self, list_id: str) -> TrelloList:
+        resp = await self._request(
+            "PUT", f"lists/{list_id}/closed", data={"value": "true"}
+        )
+        item = resp.json()
+        return TrelloList(id=item["id"], name=item["name"])
+
+    async def move_list(self, list_id: str, position: str) -> TrelloList:
+        resp = await self._request("PUT", f"lists/{list_id}", data={"pos": position})
+        item = resp.json()
+        return TrelloList(id=item["id"], name=item["name"])
 
     # --- Cards ---
 
@@ -169,6 +234,70 @@ class TrelloClient:
     async def archive_card(self, card_id: str) -> Card:
         resp = await self._request("PUT", f"cards/{card_id}", data={"closed": "true"})
         return self._parse_card_summary(resp.json())
+
+    # --- Labels ---
+
+    async def get_labels(self, board_id: str) -> list[Label]:
+        resp = await self._request("GET", f"boards/{board_id}/labels")
+        return [
+            Label(id=lbl["id"], name=lbl.get("name", ""), color=lbl.get("color"))
+            for lbl in resp.json()
+        ]
+
+    async def create_label(
+        self, board_id: str, name: str, color: str | None = None
+    ) -> Label:
+        data: dict[str, str] = {"name": name}
+        if color is not None:
+            data["color"] = color
+        resp = await self._request("POST", f"boards/{board_id}/labels", data=data)
+        lbl = resp.json()
+        return Label(id=lbl["id"], name=lbl.get("name", ""), color=lbl.get("color"))
+
+    async def delete_label(self, label_id: str) -> None:
+        await self._request("DELETE", f"labels/{label_id}")
+
+    async def add_label_to_card(self, card_id: str, label_id: str) -> None:
+        await self._request(
+            "POST", f"cards/{card_id}/idLabels", data={"value": label_id}
+        )
+
+    async def remove_label_from_card(self, card_id: str, label_id: str) -> None:
+        await self._request("DELETE", f"cards/{card_id}/idLabels/{label_id}")
+
+    # --- Attachments ---
+
+    async def get_attachments(self, card_id: str) -> list[Attachment]:
+        resp = await self._request("GET", f"cards/{card_id}/attachments")
+        return [
+            Attachment(
+                id=a["id"],
+                name=a["name"],
+                url=a["url"],
+                date=a["date"],
+                bytes=a.get("bytes"),
+            )
+            for a in resp.json()
+        ]
+
+    async def add_attachment(
+        self, card_id: str, url: str, name: str | None = None
+    ) -> Attachment:
+        data: dict[str, str] = {"url": url}
+        if name is not None:
+            data["name"] = name
+        resp = await self._request("POST", f"cards/{card_id}/attachments", data=data)
+        a = resp.json()
+        return Attachment(
+            id=a["id"],
+            name=a["name"],
+            url=a["url"],
+            date=a["date"],
+            bytes=a.get("bytes"),
+        )
+
+    async def delete_attachment(self, card_id: str, attachment_id: str) -> None:
+        await self._request("DELETE", f"cards/{card_id}/attachments/{attachment_id}")
 
     # --- Comments ---
 

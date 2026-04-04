@@ -21,7 +21,7 @@ async def get_cards(list_id: str) -> str:
         return "No cards in this list."
     lines = [f"## Cards ({len(cards)})", ""]
     for c in cards:
-        lines.append(c.to_compact_markdown())
+        lines.append(c.to_markdown())
     return "\n".join(lines)
 
 
