@@ -1,6 +1,38 @@
 # CHANGELOG
 
 
+## v0.4.0 (2026-04-04)
+
+### Bug Fixes
+
+- Correct server name casing for MCP registry publishing
+  ([`8071a14`](https://github.com/Jimdrews/fastmcp-trello/commit/8071a1484175e4dd673896aec48746ed7e118af7))
+
+- Include card ID in Card.to_markdown() output
+  ([`f11192b`](https://github.com/Jimdrews/fastmcp-trello/commit/f11192bfb23c9325723b6e3f72f40f8cca3f46d3))
+
+### Chores
+
+- Include server.json in semantic-release version bumps
+  ([`fe846a4`](https://github.com/Jimdrews/fastmcp-trello/commit/fe846a4d0a0f2a7b8d4410da9714697800a422eb))
+
+- Update server.json version to 0.3.0
+  ([`4442c16`](https://github.com/Jimdrews/fastmcp-trello/commit/4442c1635ca19143bab0444ad76e37e2de8a86fc))
+
+### Features
+
+- Add tier 2 tools — labels, lists, attachments, board management
+  ([`d95405d`](https://github.com/Jimdrews/fastmcp-trello/commit/d95405dfc84ab2148754263290af2a2db518be71))
+
+Add 15 new MCP tools bringing the total to 25: - Labels: get_labels, create_label, delete_label,
+  add_label_to_card, remove_label_from_card - Lists: create_list, update_list, archive_list,
+  move_list - Attachments: get_attachments, add_attachment, delete_attachment - Boards:
+  create_board, update_board, close_board
+
+Refactor models to use TrelloModel base class with generic to_markdown(), add Attachment model,
+  remove to_compact_markdown() in favor of single rendering method.
+
+
 ## v0.3.0 (2026-04-04)
 
 ### Bug Fixes

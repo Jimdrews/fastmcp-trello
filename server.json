@@ -3,7 +3,7 @@
   "name": "io.github.Jimdrews/fastmcp-trello",
   "title": "Trello MCP Server",
   "description": "Manage Trello boards, lists, and cards from any MCP-compatible AI assistant",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "repository": {
     "url": "https://github.com/Jimdrews/fastmcp-trello",
     "source": "github"
@@ -12,7 +12,7 @@
     {
       "registryType": "pypi",
       "identifier": "fastmcp-trello",
-      "version": "0.3.0",
+      "version": "0.4.0",
       "runtimeHint": "uvx",
       "transport": {
         "type": "stdio"
