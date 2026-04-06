@@ -1,6 +1,6 @@
 [project]
 name = "fastmcp-trello"
-version = "0.4.1"
+version = "0.5.0"
 description = "A Trello MCP server built with FastMCP"
 readme = "README.md"
 authors = [

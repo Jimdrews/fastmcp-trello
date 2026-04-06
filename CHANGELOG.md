@@ -1,6 +1,32 @@
 # CHANGELOG
 
 
+## v0.5.0 (2026-04-06)
+
+### Chores
+
+- Add changelog URL to PyPI project metadata
+  ([`c56bf3c`](https://github.com/Jimdrews/fastmcp-trello/commit/c56bf3c1f4e5dfba69213457eef3263b6f6c32fd))
+
+### Documentation
+
+- Update contributing guide for fork-based workflow
+  ([`7e9fe34`](https://github.com/Jimdrews/fastmcp-trello/commit/7e9fe34d4e6851e4cdf9f4ee64b633c21cabb20f))
+
+- Update contributing guide to use direct clone and require PRs
+  ([#1](https://github.com/Jimdrews/fastmcp-trello/pull/1),
+  [`043868d`](https://github.com/Jimdrews/fastmcp-trello/commit/043868d2c95bf59500c6620dd7c579d3345cb274))
+
+### Features
+
+- Add card position support for create, update, and read operations
+  ([`eb2d317`](https://github.com/Jimdrews/fastmcp-trello/commit/eb2d31707f6be7809ef7ef0ed997d482a8f5a85a))
+
+Expose the Trello API's pos parameter on create_card and update_card tools, and return position data
+  on all card reads (get_cards, get_card, search_cards) so consumers can use float-based
+  positioning.
+
+
 ## v0.4.1 (2026-04-04)
 
 ### Bug Fixes
