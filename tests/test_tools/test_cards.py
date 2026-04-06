@@ -85,6 +85,32 @@ class TestCreateCard:
         assert "Detailed task" in result
 
     @pytest.mark.asyncio
+    async def test_create_with_position(self, mock_client):
+        mock_client.create_card.return_value = Card(
+            id="new3", name="Top task", closed=False
+        )
+        with patch("trello_mcp.server.get_client", return_value=mock_client):
+            result = await create_card(list_id="list1", name="Top task", position="top")
+        assert "Card created" in result
+        mock_client.create_card.assert_called_once_with(
+            list_id="list1", name="Top task", desc=None, due=None, pos="top"
+        )
+
+    @pytest.mark.asyncio
+    async def test_create_with_position_float(self, mock_client):
+        mock_client.create_card.return_value = Card(
+            id="new4", name="Positioned task", closed=False
+        )
+        with patch("trello_mcp.server.get_client", return_value=mock_client):
+            result = await create_card(
+                list_id="list1", name="Positioned task", position=2048.5
+            )
+        assert "Card created" in result
+        mock_client.create_card.assert_called_once_with(
+            list_id="list1", name="Positioned task", desc=None, due=None, pos=2048.5
+        )
+
+    @pytest.mark.asyncio
     async def test_create_invalid_list(self, mock_client):
         mock_client.create_card.side_effect = TrelloAPIError("Not found")
         with patch("trello_mcp.server.get_client", return_value=mock_client):
@@ -112,7 +138,7 @@ class TestUpdateCard:
             result = await update_card(card_id="card1", list_id="list2")
         assert "Card updated" in result
         mock_client.update_card.assert_called_once_with(
-            "card1", name=None, desc=None, due=None, list_id="list2"
+            "card1", name=None, desc=None, due=None, list_id="list2", pos=None
         )
 
     @pytest.mark.asyncio
@@ -125,6 +151,30 @@ class TestUpdateCard:
                 card_id="card1", name="New name", description="New desc"
             )
         assert "Card updated" in result
+
+    @pytest.mark.asyncio
+    async def test_update_position(self, mock_client):
+        mock_client.update_card.return_value = Card(
+            id="card1", name="Task", closed=False
+        )
+        with patch("trello_mcp.server.get_client", return_value=mock_client):
+            result = await update_card(card_id="card1", position="top")
+        assert "Card updated" in result
+        mock_client.update_card.assert_called_once_with(
+            "card1", name=None, desc=None, due=None, list_id=None, pos="top"
+        )
+
+    @pytest.mark.asyncio
+    async def test_update_position_float(self, mock_client):
+        mock_client.update_card.return_value = Card(
+            id="card1", name="Task", closed=False
+        )
+        with patch("trello_mcp.server.get_client", return_value=mock_client):
+            result = await update_card(card_id="card1", position=1293.5)
+        assert "Card updated" in result
+        mock_client.update_card.assert_called_once_with(
+            "card1", name=None, desc=None, due=None, list_id=None, pos=1293.5
+        )
 
     @pytest.mark.asyncio
     async def test_update_invalid_card(self, mock_client):

@@ -63,6 +63,7 @@ class Card(TrelloModel):
     name: str
     desc: str | None = None
     due: str | None = None
+    pos: float | None = None
     closed: bool = False
     list_name: str | None = None
     board_name: str | None = None
@@ -79,6 +80,8 @@ class Card(TrelloModel):
             lines.append(f"- **Board:** {self.board_name}")
         if self.due:
             lines.append(f"- **Due:** {self.due[:10]}")
+        if self.pos is not None:
+            lines.append(f"- **Position:** {self.pos}")
         if self.labels:
             label_str = ", ".join(lbl.to_markdown() for lbl in self.labels)
             lines.append(f"- **Labels:** {label_str}")

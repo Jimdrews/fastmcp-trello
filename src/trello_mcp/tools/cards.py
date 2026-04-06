@@ -44,14 +44,19 @@ async def create_card(
     name: str,
     description: str | None = None,
     due: str | None = None,
+    position: str | float | None = None,
 ) -> str:
-    """Create a new card on a list."""
+    """Create a new card on a list.
+
+    Set position to "top", "bottom", or a positive float
+    to control placement.
+    """
     from trello_mcp.server import get_client
 
     async with get_client() as client:
         try:
             card = await client.create_card(
-                list_id=list_id, name=name, desc=description, due=due
+                list_id=list_id, name=name, desc=description, due=due, pos=position
             )
         except TrelloAPIError as e:
             return str(e)
@@ -65,14 +70,25 @@ async def update_card(
     description: str | None = None,
     due: str | None = None,
     list_id: str | None = None,
+    position: str | float | None = None,
 ) -> str:
-    """Update a card's fields. Set list_id to move the card to a different list."""
+    """Update a card's fields.
+
+    Set list_id to move the card to a different list.
+    Set position to "top", "bottom", or a positive float
+    to reorder within the list.
+    """
     from trello_mcp.server import get_client
 
     async with get_client() as client:
         try:
             card = await client.update_card(
-                card_id, name=name, desc=description, due=due, list_id=list_id
+                card_id,
+                name=name,
+                desc=description,
+                due=due,
+                list_id=list_id,
+                pos=position,
             )
         except TrelloAPIError as e:
             return str(e)

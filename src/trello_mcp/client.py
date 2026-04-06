@@ -187,6 +187,7 @@ class TrelloClient:
             name=data["name"],
             desc=data.get("desc") or None,
             due=data.get("due"),
+            pos=data.get("pos"),
             closed=data.get("closed", False),
             list_name=data.get("list", {}).get("name"),
             board_name=data.get("board", {}).get("name"),
@@ -202,12 +203,15 @@ class TrelloClient:
         name: str,
         desc: str | None = None,
         due: str | None = None,
+        pos: str | float | None = None,
     ) -> Card:
         data: dict[str, str] = {"idList": list_id, "name": name}
         if desc is not None:
             data["desc"] = desc
         if due is not None:
             data["due"] = due
+        if pos is not None:
+            data["pos"] = str(pos)
         resp = await self._request("POST", "cards", data=data)
         return self._parse_card_summary(resp.json())
 
@@ -218,6 +222,7 @@ class TrelloClient:
         desc: str | None = None,
         due: str | None = None,
         list_id: str | None = None,
+        pos: str | float | None = None,
     ) -> Card:
         data: dict[str, str] = {}
         if name is not None:
@@ -228,6 +233,8 @@ class TrelloClient:
             data["due"] = due
         if list_id is not None:
             data["idList"] = list_id
+        if pos is not None:
+            data["pos"] = str(pos)
         resp = await self._request("PUT", f"cards/{card_id}", data=data)
         return self._parse_card_summary(resp.json())
 
@@ -331,6 +338,7 @@ class TrelloClient:
                 name=c["name"],
                 desc=c.get("desc") or None,
                 due=c.get("due"),
+                pos=c.get("pos"),
                 closed=c.get("closed", False),
                 labels=[
                     Label(
@@ -354,6 +362,7 @@ class TrelloClient:
             name=data["name"],
             desc=data.get("desc") or None,
             due=data.get("due"),
+            pos=data.get("pos"),
             closed=data.get("closed", False),
             labels=[
                 Label(id=lbl["id"], name=lbl.get("name", ""), color=lbl.get("color"))

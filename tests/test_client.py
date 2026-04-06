@@ -152,6 +152,7 @@ class TestGetCards:
                     "name": "Fix bug",
                     "desc": "A bug",
                     "due": "2026-04-15T12:00:00.000Z",
+                    "pos": 16384.0,
                     "closed": False,
                     "labels": [{"id": "lab1", "name": "bug", "color": "red"}],
                 },
@@ -160,6 +161,7 @@ class TestGetCards:
                     "name": "Add feature",
                     "desc": "",
                     "due": None,
+                    "pos": 32768.0,
                     "closed": False,
                     "labels": [],
                 },
@@ -169,7 +171,9 @@ class TestGetCards:
             cards = await client.get_cards("list1")
         assert len(cards) == 2
         assert cards[0].name == "Fix bug"
+        assert cards[0].pos == 16384.0
         assert cards[0].labels[0].name == "bug"
+        assert cards[1].pos == 32768.0
 
 
 class TestGetCard:
@@ -182,6 +186,7 @@ class TestGetCard:
                 "name": "Fix bug",
                 "desc": "A bug to fix",
                 "due": "2026-04-15T12:00:00.000Z",
+                "pos": 65535.0,
                 "closed": False,
                 "labels": [{"id": "lab1", "name": "bug", "color": "red"}],
                 "members": [
@@ -210,6 +215,7 @@ class TestGetCard:
         async with client:
             card = await client.get_card("card1")
         assert card.name == "Fix bug"
+        assert card.pos == 65535.0
         assert card.list_name == "Doing"
         assert card.board_name == "Sprint 42"
         assert len(card.comments) == 1
@@ -257,6 +263,42 @@ class TestCreateCard:
         assert card.name == "Detailed task"
         assert card.desc == "Some details"
 
+    @pytest.mark.asyncio
+    async def test_create_with_position(self, client, httpx_mock: HTTPXMock):
+        httpx_mock.add_response(
+            json={
+                "id": "newcard3",
+                "name": "Top task",
+                "desc": "",
+                "due": None,
+                "closed": False,
+                "labels": [],
+                "url": "https://trello.com/c/new3",
+            }
+        )
+        async with client:
+            card = await client.create_card(list_id="list1", name="Top task", pos="top")
+        assert card.name == "Top task"
+
+    @pytest.mark.asyncio
+    async def test_create_with_position_float(self, client, httpx_mock: HTTPXMock):
+        httpx_mock.add_response(
+            json={
+                "id": "newcard4",
+                "name": "Positioned task",
+                "desc": "",
+                "due": None,
+                "closed": False,
+                "labels": [],
+                "url": "https://trello.com/c/new4",
+            }
+        )
+        async with client:
+            card = await client.create_card(
+                list_id="list1", name="Positioned task", pos=2048.5
+            )
+        assert card.name == "Positioned task"
+
 
 class TestUpdateCard:
     @pytest.mark.asyncio
@@ -291,6 +333,57 @@ class TestUpdateCard:
         )
         async with client:
             card = await client.update_card("card1", list_id="list2")
+        assert card.name == "Task"
+
+    @pytest.mark.asyncio
+    async def test_update_position_top(self, client, httpx_mock: HTTPXMock):
+        httpx_mock.add_response(
+            json={
+                "id": "card1",
+                "name": "Task",
+                "desc": "",
+                "due": None,
+                "closed": False,
+                "labels": [],
+                "url": "https://trello.com/c/abc",
+            }
+        )
+        async with client:
+            card = await client.update_card("card1", pos="top")
+        assert card.name == "Task"
+
+    @pytest.mark.asyncio
+    async def test_update_position_bottom(self, client, httpx_mock: HTTPXMock):
+        httpx_mock.add_response(
+            json={
+                "id": "card1",
+                "name": "Task",
+                "desc": "",
+                "due": None,
+                "closed": False,
+                "labels": [],
+                "url": "https://trello.com/c/abc",
+            }
+        )
+        async with client:
+            card = await client.update_card("card1", pos="bottom")
+        assert card.name == "Task"
+
+    @pytest.mark.asyncio
+    async def test_update_position_float(self, client, httpx_mock: HTTPXMock):
+        httpx_mock.add_response(
+            json={
+                "id": "card1",
+                "name": "Task",
+                "desc": "",
+                "due": None,
+                "closed": False,
+                "labels": [],
+                "url": "https://trello.com/c/abc",
+            }
+        )
+        async with client:
+            card = await client.update_card("card1", pos=1293.5)
         assert card.name == "Task"
 
 
@@ -611,6 +704,7 @@ class TestSearchCards:
                         "name": "Fix login",
                         "desc": "",
                         "due": None,
+                        "pos": 49152.0,
                         "closed": False,
                         "labels": [],
                         "board": {"id": "board1", "name": "Sprint 42"},
@@ -623,6 +717,7 @@ class TestSearchCards:
             cards = await client.search_cards("login")
         assert len(cards) == 1
         assert cards[0].name == "Fix login"
+        assert cards[0].pos == 49152.0
         assert cards[0].board_name == "Sprint 42"
 
     @pytest.mark.asyncio
