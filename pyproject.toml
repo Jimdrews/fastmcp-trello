@@ -25,6 +25,7 @@ dependencies = [
 Homepage = "https://github.com/Jimdrews/fastmcp-trello"
 Repository = "https://github.com/Jimdrews/fastmcp-trello"
 Issues = "https://github.com/Jimdrews/fastmcp-trello/issues"
+Changelog = "https://github.com/Jimdrews/fastmcp-trello/blob/main/CHANGELOG.md"
 
 [project.scripts]
 fastmcp-trello = "trello_mcp.__main__:main"
